@@ -73,7 +73,7 @@ var MapsLib = {
     $("#result_count").hide();
     
     //-----custom initializers-------
-    
+
     //-----end of custom initializers-------
 
     //run the default search
@@ -89,6 +89,29 @@ var MapsLib = {
 
     //-----custom filters-------
 
+    // filter for type
+    var type_column = "'type'";
+    var tempWhereClause = [];
+    if ( $("#cbType1").is(':checked')) tempWhereClause.push("other");
+    if ( $("#cbType2").is(':checked')) tempWhereClause.push("restaurants");
+    if ( $("#cbType3").is(':checked')) tempWhereClause.push("bars");
+    if ( $("#cbType4").is(':checked')) tempWhereClause.push("markets and stores");
+    whereClause += " AND " + type_column + " IN ('" + tempWhereClause.join("','") + "')";
+    
+    // filter for late night
+    var late_column = "'late'";
+    var tempWhereClause = [];
+    if ( $("#cbLate1").is(':checked')) tempWhereClause.push("Yes");
+    if ( $("#cbLate2").is(':checked')) tempWhereClause.push("Maybe");
+    if ( $("#cbLate3").is(':checked')) tempWhereClause.push("No");
+    whereClause += " AND " + late_column + " IN ('" + tempWhereClause.join("','") + "')";
+    
+    // filter for search terms
+    var text_search = $("#text_search").val().replace("'", "\'");
+    if (text_search != '')
+      whereClause += " AND 'info' contains ignoring case '" + text_search + "'";
+    
+    console.log(whereClause);
     //-------end of custom filters--------
 
     if (address != "") {
@@ -218,6 +241,7 @@ var MapsLib = {
         console.log(" Domain: " + error[row]["domain"]);
         console.log(" Reason: " + error[row]["reason"]);
         console.log(" Message: " + error[row]["message"]);
+        console.log(error[row]);
       }
     }
   },
